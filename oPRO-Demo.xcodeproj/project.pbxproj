@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1087C0A550A24B4689E8C767 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EACC528464A3486890CABA51 /* libPods.a */; };
+		132D7C6015CC3EA600C8006F /* OproClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 132D7C5F15CC3EA600C8006F /* OproClient.m */; };
 		13723F6715CA4B2500D68D78 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13723F6615CA4B2500D68D78 /* UIKit.framework */; };
 		13723F6915CA4B2500D68D78 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13723F6815CA4B2500D68D78 /* Foundation.framework */; };
 		13723F6B15CA4B2500D68D78 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13723F6A15CA4B2500D68D78 /* CoreGraphics.framework */; };
@@ -18,19 +20,23 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		132D7C5E15CC3EA600C8006F /* OproClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OproClient.h; path = ../OproClient.h; sourceTree = "<group>"; };
+		132D7C5F15CC3EA600C8006F /* OproClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OproClient.m; path = ../OproClient.m; sourceTree = "<group>"; };
 		13723F6215CA4B2500D68D78 /* oPRO-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "oPRO-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		13723F6615CA4B2500D68D78 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		13723F6815CA4B2500D68D78 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		13723F6A15CA4B2500D68D78 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		13723F6E15CA4B2500D68D78 /* oPRO-Demo-Info.plist */ = {isa = PBXFileReference; path = "oPRO-Demo-Info.plist"; sourceTree = "<group>"; };
+		13723F6615CA4B2500D68D78 /* UIKit.framework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		13723F6815CA4B2500D68D78 /* Foundation.framework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		13723F6A15CA4B2500D68D78 /* CoreGraphics.framework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		13723F6E15CA4B2500D68D78 /* oPRO-Demo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "oPRO-Demo-Info.plist"; sourceTree = "<group>"; };
 		13723F7015CA4B2500D68D78 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		13723F7215CA4B2500D68D78 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		13723F7415CA4B2500D68D78 /* oPRO-Demo-Prefix.pch */ = {isa = PBXFileReference; path = "oPRO-Demo-Prefix.pch"; sourceTree = "<group>"; };
-		13723F7515CA4B2500D68D78 /* SchneemsAppDelegate.h */ = {isa = PBXFileReference; path = SchneemsAppDelegate.h; sourceTree = "<group>"; };
+		13723F7415CA4B2500D68D78 /* oPRO-Demo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "oPRO-Demo-Prefix.pch"; sourceTree = "<group>"; };
+		13723F7515CA4B2500D68D78 /* SchneemsAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SchneemsAppDelegate.h; sourceTree = "<group>"; };
 		13723F7615CA4B2500D68D78 /* SchneemsAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SchneemsAppDelegate.m; sourceTree = "<group>"; };
-		13723F7815CA4B2500D68D78 /* SchneemsViewController.h */ = {isa = PBXFileReference; path = SchneemsViewController.h; sourceTree = "<group>"; };
+		13723F7815CA4B2500D68D78 /* SchneemsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SchneemsViewController.h; sourceTree = "<group>"; };
 		13723F7915CA4B2600D68D78 /* SchneemsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SchneemsViewController.m; sourceTree = "<group>"; };
 		13723F7C15CA4B2600D68D78 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SchneemsViewController.xib; sourceTree = "<group>"; };
+		E5EFE48E089E4B77A48EA220 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
+		EACC528464A3486890CABA51 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +47,7 @@
 				13723F6715CA4B2500D68D78 /* UIKit.framework in Frameworks */,
 				13723F6915CA4B2500D68D78 /* Foundation.framework in Frameworks */,
 				13723F6B15CA4B2500D68D78 /* CoreGraphics.framework in Frameworks */,
+				1087C0A550A24B4689E8C767 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,6 +60,7 @@
 				13723F6C15CA4B2500D68D78 /* oPRO-Demo */,
 				13723F6515CA4B2500D68D78 /* Frameworks */,
 				13723F6315CA4B2500D68D78 /* Products */,
+				E5EFE48E089E4B77A48EA220 /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -70,6 +78,7 @@
 				13723F6615CA4B2500D68D78 /* UIKit.framework */,
 				13723F6815CA4B2500D68D78 /* Foundation.framework */,
 				13723F6A15CA4B2500D68D78 /* CoreGraphics.framework */,
+				EACC528464A3486890CABA51 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -78,6 +87,8 @@
 			isa = PBXGroup;
 			children = (
 				13723F7515CA4B2500D68D78 /* SchneemsAppDelegate.h */,
+				132D7C5E15CC3EA600C8006F /* OproClient.h */,
+				132D7C5F15CC3EA600C8006F /* OproClient.m */,
 				13723F7615CA4B2500D68D78 /* SchneemsAppDelegate.m */,
 				13723F7815CA4B2500D68D78 /* SchneemsViewController.h */,
 				13723F7915CA4B2600D68D78 /* SchneemsViewController.m */,
@@ -108,6 +119,7 @@
 				13723F5E15CA4B2500D68D78 /* Sources */,
 				13723F5F15CA4B2500D68D78 /* Frameworks */,
 				13723F6015CA4B2500D68D78 /* Resources */,
+				98111450558E40E986226090 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -156,6 +168,23 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		98111450558E40E986226090 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		13723F5E15CA4B2500D68D78 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -164,6 +193,7 @@
 				13723F7315CA4B2500D68D78 /* main.m in Sources */,
 				13723F7715CA4B2500D68D78 /* SchneemsAppDelegate.m in Sources */,
 				13723F7A15CA4B2600D68D78 /* SchneemsViewController.m in Sources */,
+				132D7C6015CC3EA600C8006F /* OproClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,6 +266,7 @@
 		};
 		13723F8115CA4B2600D68D78 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E5EFE48E089E4B77A48EA220 /* Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "oPRO-Demo/oPRO-Demo-Prefix.pch";
@@ -247,6 +278,7 @@
 		};
 		13723F8215CA4B2600D68D78 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E5EFE48E089E4B77A48EA220 /* Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "oPRO-Demo/oPRO-Demo-Prefix.pch";
@@ -275,6 +307,7 @@
 				13723F8215CA4B2600D68D78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

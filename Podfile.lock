@@ -1,0 +1,7 @@
+PODS:
+  - AFNetworking (1.0RC1)
+  - AFOAuth2Client (0.0.1)
+
+DEPENDENCIES:
+  - AFNetworking
+  - AFOAuth2Client
