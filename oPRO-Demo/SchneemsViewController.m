@@ -18,15 +18,17 @@
 @synthesize getUserCredentialsButton;
 @synthesize getAccessTokenButton;
 
-
+// Calls /users/random.json which will generate a random username and password on the server.
+// The server then returns the username and password that we can then use to log in.
+// You wouldn't want to do this in your actual app, but it provides for an easy iPhone app demo
+// oClientBaseURLString is defined in OproClient.h
 - (IBAction)getUserCredentials:(id)sender {  
   [getUserCredentialsButton setEnabled:NO];
   NSURL *url = [NSURL URLWithString:[oClientBaseURLString stringByAppendingString:@"users/random.json"]];
   NSURLRequest *request = [NSURLRequest requestWithURL:url];
   AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-    // NSLog(@"Response: %@", JSON);
-    password = [JSON objectForKey:@"password"];
-    username = [JSON objectForKey:@"username"];
+    [userUsernameField setText:[JSON objectForKey:@"username"]];
+    [userPasswordField setText:[JSON objectForKey:@"password"]];
     [getAccessTokenButton setEnabled:YES];
     [getAccessTokenButton setHighlighted:YES];
   } failure:nil];
@@ -36,44 +38,51 @@
   
 }
 
+
+// Once we have a username and password we can then request an OAuth 2 access token.
+// We send the username, password, along with client id and secret found in OproClient.h
+// once we get the access_token back we can set the auth headers for any future OproClient requests
+// oClientBaseURLString is also defined in OproClient.h
 - (IBAction)getAccessToken:(id)sender {
-NSLog(@"Foo");
   
   NSURL *url = [NSURL URLWithString:oClientBaseURLString];
   AFOAuth2Client *OAuthClient = [[AFOAuth2Client alloc] initWithBaseURL:url];
-  //    AFJSONRequestOperation.set
   
   [OAuthClient registerHTTPOperationClass:[AFJSONRequestOperation class]];
-
-  NSLog(@"Username: %@", username);  
-  NSLog(@"Password: %@", password);
-  
-  [OAuthClient authenticateUsingOAuthWithPath:@"oauth/token.json" username:username password:password clientID:@"5e163ed8c70cc28e993109c788325307" secret:@"898ca5b48548bb3988b3c8469081fcfb" success:^(AFOAuthAccount *account) {
+  [OAuthClient authenticateUsingOAuthWithPath:@"oauth/token.json" username:userUsernameField.text  password:userPasswordField.text clientID:oClientID secret:oClientSecret success:^(AFOAuthAccount *account) {
     NSLog(@"Success: %@", account);
     NSLog(@"Foo: %@", account.credential.accessToken);
     [OproClient setAccessToken:account.credential.accessToken];
-//    [AFHTTPClient setAuthorizationHeaderWithToken:account.credential.accessToken];
   } failure:^(NSError *error) {
     NSLog(@"Error: %@", error);
   }];
-  password = @"";
-  username = @"";
-  
-  
+
   
   [[OproClient sharedClient] getPath:@"/users/me" parameters:[NSDictionary dictionary] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     NSLog(@"Success: %@", responseObject);
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     NSLog(@"Error: %@", error);
   }];
-  
+
   
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    // if username and password fields are present allow the user to submit them
+    [userUsernameField addTarget:self action:@selector(checkPasswordUsernamePresence:) forControlEvents:UIControlEventEditingChanged];
+    [userPasswordField addTarget:self action:@selector(checkPasswordUsernamePresence:) forControlEvents:UIControlEventEditingChanged];
+
+}
+
+// if username and password fields are present allow the user to submit them
+- (void)checkPasswordUsernamePresence:(id)sender
+{
+  if (![userUsernameField.text isEqualToString:@""] && ![userPasswordField.text isEqualToString:@""]) {
+    [getAccessTokenButton setEnabled:YES];
+    [getAccessTokenButton setHighlighted:YES];
+  }
 }
 
 - (void)viewDidUnload

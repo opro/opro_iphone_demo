@@ -86,9 +86,9 @@
 		13723F6C15CA4B2500D68D78 /* oPRO-Demo */ = {
 			isa = PBXGroup;
 			children = (
-				13723F7515CA4B2500D68D78 /* SchneemsAppDelegate.h */,
 				132D7C5E15CC3EA600C8006F /* OproClient.h */,
 				132D7C5F15CC3EA600C8006F /* OproClient.m */,
+				13723F7515CA4B2500D68D78 /* SchneemsAppDelegate.h */,
 				13723F7615CA4B2500D68D78 /* SchneemsAppDelegate.m */,
 				13723F7815CA4B2500D68D78 /* SchneemsViewController.h */,
 				13723F7915CA4B2600D68D78 /* SchneemsViewController.m */,
