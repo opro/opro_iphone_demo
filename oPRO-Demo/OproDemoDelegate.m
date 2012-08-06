@@ -6,11 +6,11 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "SchneemsAppDelegate.h"
+#import "OproDemoDelegate.h"
 
-#import "SchneemsViewController.h"
+#import "OproDemoViewController.h"
 
-@implementation SchneemsAppDelegate
+@implementation OproDemoDelegate
 
 @synthesize window = _window;
 @synthesize viewController = _viewController;
@@ -19,7 +19,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-  self.viewController = [[SchneemsViewController alloc] initWithNibName:@"SchneemsViewController" bundle:nil];
+  self.viewController = [[OproDemoViewController alloc] initWithNibName:@"SchneemsViewController" bundle:nil];
   self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     return YES;

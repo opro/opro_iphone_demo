@@ -6,15 +6,15 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "SchneemsViewController.h"
-#import "OproClient.h"
+#import "OproDemoViewController.h"
+#import "OproAPIClient.h"
 
 
-@interface SchneemsViewController ()
+@interface OproDemoViewController ()
 
 @end
 
-@implementation SchneemsViewController
+@implementation OproDemoViewController
 @synthesize getUserCredentialsButton;
 @synthesize getAccessTokenButton;
 
@@ -52,13 +52,13 @@
   [OAuthClient authenticateUsingOAuthWithPath:@"oauth/token.json" username:userUsernameField.text  password:userPasswordField.text clientID:oClientID secret:oClientSecret success:^(AFOAuthAccount *account) {
     NSLog(@"Success: %@", account);
     NSLog(@"Foo: %@", account.credential.accessToken);
-    [OproClient setAccessToken:account.credential.accessToken];
+    [OproAPIClient setAccessToken:account.credential.accessToken];
   } failure:^(NSError *error) {
     NSLog(@"Error: %@", error);
   }];
 
   
-  [[OproClient sharedClient] getPath:@"/users/me" parameters:[NSDictionary dictionary] success:^(AFHTTPRequestOperation *operation, id responseObject) {
+  [[OproAPIClient sharedClient] getPath:@"/users/me" parameters:[NSDictionary dictionary] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     NSLog(@"Success: %@", responseObject);
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     NSLog(@"Error: %@", error);

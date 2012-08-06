@@ -10,9 +10,9 @@
 
 #import "AFHTTPClient.h"
 
-@interface OproClient : AFHTTPClient
+@interface OproAPIClient : AFHTTPClient
 
-+ (OproClient *) sharedClient;
++ (OproAPIClient *) sharedClient;
 + (void)setAccessToken:(NSString *)access_token;
 
 #define oClientBaseURLString @"https://opro-demo.herokuapp.com/"

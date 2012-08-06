@@ -6,18 +6,18 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "OproClient.h"
+#import "OproAPIClient.h"
 
 #import "AFJSONRequestOperation.h"
 
 NSString * global_access_token;
 
 
-@implementation OproClient
+@implementation OproAPIClient
 
 
-+ (OproClient *) sharedClient{
-  static OproClient *_sharedClient = nil;
++ (OproAPIClient *) sharedClient{
+  static OproAPIClient *_sharedClient = nil;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
     _sharedClient = [[self alloc] initWithBaseURL:[NSURL URLWithString:oClientBaseURLString]];

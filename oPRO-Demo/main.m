@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-#import "SchneemsAppDelegate.h"
+#import "OproDemoDelegate.h"
 
 int main(int argc, char *argv[])
 {
   @autoreleasepool {
-      return UIApplicationMain(argc, argv, nil, NSStringFromClass([SchneemsAppDelegate class]));
+      return UIApplicationMain(argc, argv, nil, NSStringFromClass([OproDemoDelegate class]));
   }
 }

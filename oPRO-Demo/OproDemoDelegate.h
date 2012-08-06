@@ -8,12 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@class SchneemsViewController;
+@class OproDemoViewController;
 
-@interface SchneemsAppDelegate : UIResponder <UIApplicationDelegate>
+@interface OproDemoDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (strong, nonatomic) SchneemsViewController *viewController;
+@property (strong, nonatomic) OproDemoViewController *viewController;
 
 @end

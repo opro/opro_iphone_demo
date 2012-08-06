@@ -13,7 +13,7 @@
 
 #import "AFOAuth2Client.h"
 
-@interface SchneemsViewController : UIViewController
+@interface OproDemoViewController : UIViewController
 {
   NSString *access_token;
   
