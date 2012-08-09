@@ -24,7 +24,6 @@
   // text field variables
   IBOutlet UITextField *userPasswordField;
   IBOutlet UITextField *userUsernameField;
-
 }
 - (IBAction)getUserCredentials:(id)sender;
 - (IBAction)getAccessToken:(id)sender;

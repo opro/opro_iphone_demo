@@ -9,6 +9,10 @@
 #import "OproDemoViewController.h"
 #import "OproAPIClient.h"
 
+#import "EditUserViewController.h"
+
+#import "User.h"
+
 
 @interface OproDemoViewController ()
 
@@ -50,19 +54,18 @@
   
   [OAuthClient registerHTTPOperationClass:[AFJSONRequestOperation class]];
   [OAuthClient authenticateUsingOAuthWithPath:@"oauth/token.json" username:userUsernameField.text  password:userPasswordField.text clientID:oClientID secret:oClientSecret success:^(AFOAuthAccount *account) {
-    NSLog(@"Success: %@", account);
-    NSLog(@"Foo: %@", account.credential.accessToken);
+    // NSLog(@"Success: %@", account);
+    // NSLog(@"Token from account: %@", account.credential.accessToken);
+
     [OproAPIClient setAccessToken:account.credential.accessToken];
+
+    EditUserViewController *viewController = [[EditUserViewController alloc] initWithNibName:@"OproEditUserViewController" bundle:nil];
+    [self.navigationController pushViewController:viewController animated:YES];
+
   } failure:^(NSError *error) {
     NSLog(@"Error: %@", error);
   }];
-
   
-  [[OproAPIClient sharedClient] getPath:@"/users/me" parameters:[NSDictionary dictionary] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-    NSLog(@"Success: %@", responseObject);
-  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-    NSLog(@"Error: %@", error);
-  }];
 
   
 }

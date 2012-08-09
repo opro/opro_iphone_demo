@@ -10,11 +10,9 @@
 
 #import "AFJSONRequestOperation.h"
 
-NSString * global_access_token;
-
+static NSString *oauthAccessToken;
 
 @implementation OproAPIClient
-
 
 + (OproAPIClient *) sharedClient{
   static OproAPIClient *_sharedClient = nil;
@@ -22,13 +20,17 @@ NSString * global_access_token;
   dispatch_once(&onceToken, ^{
     _sharedClient = [[self alloc] initWithBaseURL:[NSURL URLWithString:oClientBaseURLString]];
   });
-  
   return _sharedClient;
 }
 
-
 + (void) setAccessToken:(NSString *)access_token {
-  global_access_token = access_token;
+  if (oauthAccessToken != access_token) {
+    oauthAccessToken = [access_token copy];
+  }
+}
+
++ (NSString*)oauthAccessToken {
+  return oauthAccessToken;
 }
 
 - (id)initWithBaseURL:(NSURL *)url {
@@ -36,12 +38,10 @@ NSString * global_access_token;
   if (!self) {
     return nil;
   }
-  
   [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
 	[self setDefaultHeader:@"Accept" value:@"application/json"];
-
-  if (global_access_token) {
-    [self setAuthorizationHeaderWithToken:global_access_token];
+  if (oauthAccessToken) {
+    [self setAuthorizationHeaderWithToken:oauthAccessToken];
   }
   return self;
 }
