@@ -6,6 +6,9 @@ oPRO allows Ruby on Rails powered websites to provide OAuth authentication to th
 
 This demo leverages [AFNetworking](https://github.com/AFNetworking/AFNetworking) for it's networking library and [AFOauth2Client](https://github.com/AFNetworking/AFOAuth2Client) to exchange the email and password for an access token. More information is available below.
 
+
+![](http://f.cl.ly/items/0M121e3j2y2x0i060o3i/Screen%20Shot%202012-08-10%20at%203.47.47%20PM.png)
+
 ## Why
 
 The purpose of this demo is to give you an idea of how you could implement an iOS client for an oPRO enabled Ruby on Rails website.
