@@ -85,7 +85,7 @@ Again, make sure to replace the username, password, client id, and client secret
 We can use the AFNetworking to easily make requests to our server.
 
 
-## Define a shared interface
+## Build a Shared Instance of AFHTTPClient subclass
 
 To make authenticated requests we need to set the Authorization header so that every request will have the access token we received using AFOauth2Client. To do this we must subclass AFHTTPClient. An example of this subclass is `OproAPIClient` in the project. We can use a shared instance of this subclass to make future requests.
 
@@ -139,6 +139,9 @@ Make sure to change `https://opro-demo.herokuapp.com/` to your own url. Be sure 
 Note the new line where we are setting the access token, we must do this before we initialize our shared client:
 
     [OproAPIClient setAccessToken:account.credential.accessToken];
+
+
+### Make Authenticated Request with Shared Interface of OproAPIClient
 
 Once we've set the access token in our `OproAPIClient` we can use the client to make authenticated calls. For example we could get a json representation of a user by getting `/users/me` on our server while authenticated:
 
