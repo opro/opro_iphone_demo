@@ -11,9 +11,6 @@
 
 #import "EditUserViewController.h"
 
-#import "User.h"
-
-
 @interface OproDemoViewController ()
 
 @end
