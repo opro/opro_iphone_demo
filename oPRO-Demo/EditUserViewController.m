@@ -27,7 +27,7 @@
     }
     
     if (zip != (id)[NSNull null]) {
-      [userTwitterField setText:zip];
+      [userZipField setText:zip];
     }
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(updateUser:)];
