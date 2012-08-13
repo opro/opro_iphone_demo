@@ -47,7 +47,6 @@
   [mutableUserParameters setValue:userEmailField.text forKey:@"email"];
   [mutableUserParameters setValue:userTwitterField.text forKey:@"twitter"];
   [mutableUserParameters setValue:userZipField.text forKey:@"zip"];
-  NSMutableDictionary *mutableParameters = [NSMutableDictionary dictionary];
 
   [[OproAPIClient sharedClient] putPath:@"/users/me" parameters:[NSDictionary dictionaryWithObject:mutableUserParameters forKey:@"user"] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     // NSLog(@"Success: %@", responseObject);

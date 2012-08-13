@@ -28,7 +28,9 @@ $ open "oPRO-Demo.xcworkspace"
 
 ## Run
 
-Build and run the program. When the app launches you can enter your credentials that you signed up for http://opro-demo.herokuapp.com/users/sign_up or if you don't want to enter your own credentials you can randomly generate some and have them returned to the iOS application (this is for demo purposes only, never do this in a real app). Once you have entered a valid email and password, click the "log in" button and you will be taken to a form where you can edit that user account.
+
+
+Make sure the target is oPRO-Demo, build and run the program. When the app launches you can enter your credentials that you signed up for http://opro-demo.herokuapp.com/users/sign_up or if you don't want to enter your own credentials you can randomly generate some and have them returned to the iOS application (this is for demo purposes only, never do this in a real app). Once you have entered a valid email and password, click the "log in" button and you will be taken to a form where you can edit that user account.
 
 Change some fields on that page and click "done" this will send an authenticated `PUT` request to the server as a user. The changed fields will be saved on the server and a json representation will be returned to the iOS client for your verification.
 
