@@ -40,6 +40,7 @@
 		13A177B515D344B400171222 /* EditUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditUserViewController.h; sourceTree = "<group>"; };
 		13A177B615D344B400171222 /* EditUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditUserViewController.m; sourceTree = "<group>"; };
 		13A177C115D34A8500171222 /* OproEditUserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OproEditUserViewController.xib; sourceTree = "<group>"; };
+		13FEE28515D865B40024AB7A /* oPRO-Demo copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "oPRO-Demo copy-Info.plist"; path = "/Users/schneems/Documents/projects/objective_c/oproDemo/opro_iphone_demo/oPRO-Demo copy-Info.plist"; sourceTree = "<absolute>"; };
 		E5EFE48E089E4B77A48EA220 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		EACC528464A3486890CABA51 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -66,6 +67,7 @@
 				13723F6515CA4B2500D68D78 /* Frameworks */,
 				13723F6315CA4B2500D68D78 /* Products */,
 				E5EFE48E089E4B77A48EA220 /* Pods.xcconfig */,
+				13FEE28515D865B40024AB7A /* oPRO-Demo copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};

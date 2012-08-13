@@ -1,22 +1,22 @@
-# oPRO iOS Client
+# iOS OAuth Client
 
 ## What
 
-oPRO allows Ruby on Rails powered websites to provide OAuth authentication to their services. This client shows how to trade a username and password for an access token on http://opro-demo.herokuapp.com. This token can then be used to access the API as an authenticated user. This is similar to how the Facebook client or a twitter client behaves.
+This client shows how to trade a username and password for an access token on an [OAuth powered website](http://opro-demo.herokuapp.com) which is running on [Heroku](http://heroku.com). This token can then be used to access the API as an authenticated user. The website is written in Ruby on Rails and is using the [oPRO](http://github.com/opro/opro) library to provide OAuth authentication to their services.
 
 This demo leverages [AFNetworking](https://github.com/AFNetworking/AFNetworking) for it's networking library and [AFOauth2Client](https://github.com/AFNetworking/AFOAuth2Client) to exchange the email and password for an access token. More information is available below.
 
 
-![](http://f.cl.ly/items/0M121e3j2y2x0i060o3i/Screen%20Shot%202012-08-10%20at%203.47.47%20PM.png)
-
 ## Why
 
-The purpose of this demo is to give you an idea of how you could implement an iOS client for an oPRO enabled Ruby on Rails website.
+The purpose of this demo is to give you an idea of how you could implement an iOS client for an OAuth enabled Ruby on Rails website running on [Heroku](http://heroku.com).
+
+![](http://f.cl.ly/items/0M121e3j2y2x0i060o3i/Screen%20Shot%202012-08-10%20at%203.47.47%20PM.png)
 
 
 ## Setup
 
-This app requires a current versio of Xcode installed on your computer:
+This app requires a current version of Xcode installed on your computer:
 
 ```sh
 $ cd oPRO-Demo
