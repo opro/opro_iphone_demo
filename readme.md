@@ -22,7 +22,7 @@ This app requires a current version of Xcode installed on your computer:
 $ cd oPRO-Demo
 $ gem install cocoapods
 $ pod install
-$ open "Opro Example.xcworkspace/"
+$ open "oPRO-Demo.xcworkspace"
 ```
 
 
