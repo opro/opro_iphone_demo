@@ -22,7 +22,7 @@ The purpose of this demo is to give you an idea of how you could implement an iO
 This app requires a current version of Xcode installed on your computer and uses cocoapods to install `AFNetworking` and `AFOAuth2Client`:
 
 ```sh
-$ cd oPRO-Demo
+$ cd opro_iphone_demo
 $ gem install cocoapods
 $ pod install
 $ open "oPRO-Demo.xcworkspace"
