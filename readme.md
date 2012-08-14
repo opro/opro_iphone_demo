@@ -8,7 +8,7 @@ This demo leverages [AFNetworking](https://github.com/AFNetworking/AFNetworking)
 
 To view the code running on the server you can look at the [oPRO Demo Rails app](http://github.com/opro/opro_rails_demo).
 
-If you are new to OAuth or to client side authentication it may be useful to check the [built in OAuth docs](opro-demo.herokuapp.com/oauth_docs) generated from the [oPRO library](http://github.com/opro/opro).
+If you are new to OAuth or to client side authentication it may be useful to check the [built in OAuth docs](http://opro-demo.herokuapp.com/oauth_docs) generated from the [oPRO library](http://github.com/opro/opro).
 
 ## Why
 
@@ -233,7 +233,7 @@ Use `NSLog` liberally to make sure that you have set the authorization header co
 
 Making authenticated calls to the built in OAuth test controller can give you better error messages. With an authenticated header send a GET request to the `/oauth_tests/show_me_the_money` path. If there are any problems with the request they will be returned to you in a JSON response.
 
-The [oPRO library](http://github.com/opro/opro) has [built in OAuth docs](opro-demo.herokuapp.com/oauth_docs) which might be useful if you are new to OAuth, or client side authentication.
+The [oPRO library](http://github.com/opro/opro) has [built in OAuth docs](http://opro-demo.herokuapp.com/oauth_docs) which might be useful if you are new to OAuth, or client side authentication.
 
 ## Troubleshooting with access to the Rails Server and logs:
 
