@@ -6,7 +6,7 @@ This client shows how to trade a username and password for an access token on an
 
 This demo leverages [AFNetworking](https://github.com/AFNetworking/AFNetworking) for it's networking library and [AFOauth2Client](https://github.com/AFNetworking/AFOAuth2Client) to exchange the email and password for an access token. More information is available below.
 
-To view the code running on the server you can look at the [oPRO Demo Rails app](http://github.com/opro/opro_demo).
+To view the code running on the server you can look at the [oPRO Demo Rails app](http://github.com/opro/opro_rails_demo).
 
 If you are new to OAuth or to client side authentication it may be useful to check the [built in OAuth docs](opro-demo.herokuapp.com/oauth_docs) generated from the [oPRO library](http://github.com/opro/opro).
 
@@ -218,7 +218,7 @@ This will show up in the Rails server as a `params` of:
 
     "user" => {"twitter" => "schneems", "email" => "awesome@example.com"}
 
-To view the code running on the server you can look at the [oPRO Demo Rails app](http://github.com/opro/opro_demo). The call to `/users/me` with a PUT request will hit the update method in `app/controllers/user_controller.rb`.
+To view the code running on the server you can look at the [oPRO Demo Rails app](http://github.com/opro/opro_rails_demo). The call to `/users/me` with a PUT request will hit the update method in `app/controllers/user_controller.rb`.
 
 ## Recap
 
