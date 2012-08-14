@@ -27,20 +27,15 @@
   NSLog(@"== Retrieving username and password from server");
 
   [getUserCredentialsButton setEnabled:NO];
-  NSURL *url = [NSURL URLWithString:[oClientBaseURLString stringByAppendingString:@"users/random.json"]];
-  NSURLRequest *request = [NSURLRequest requestWithURL:url];
-  AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-    NSLog(@"  == Successfully retrieved username and password from server");
+  [[OproAPIClient sharedClient] getPath:@"users/random.json" parameters:[NSDictionary dictionary] success:^(AFHTTPRequestOperation *operation, id responseObject) {
 
-    [userUsernameField setText:[JSON objectForKey:@"username"]];
-    [userPasswordField setText:[JSON objectForKey:@"password"]];
+    NSLog(@"  == Successfully retrieved username and password from server");
+    [userUsernameField setText:[responseObject objectForKey:@"username"]];
+    [userPasswordField setText:[responseObject objectForKey:@"password"]];
     [getAccessTokenButton setEnabled:YES];
     [getAccessTokenButton setHighlighted:YES];
-  } failure:nil];
-  
 
-  [operation start];
-  
+  } failure:nil];
 }
 
 
@@ -63,8 +58,7 @@
   }
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     // if username and password fields are present allow the user to submit them
     [userUsernameField addTarget:self action:@selector(checkPasswordUsernamePresence:) forControlEvents:UIControlEventEditingChanged];
@@ -78,22 +72,19 @@
 }
 
 // if username and password fields are present allow the user to submit them
-- (void)checkPasswordUsernamePresence:(id)sender
-{
+- (void)checkPasswordUsernamePresence:(id)sender {
   if (![userUsernameField.text isEqualToString:@""] && ![userPasswordField.text isEqualToString:@""]) {
     [getAccessTokenButton setEnabled:YES];
     [getAccessTokenButton setHighlighted:YES];
   }
 }
 
-- (void)viewDidUnload
-{
+- (void)viewDidUnload {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
   return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 

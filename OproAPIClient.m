@@ -17,6 +17,7 @@
 @synthesize isAuthenticated = _isAuthenticated;
 
 + (OproAPIClient *) sharedClient{
+
   static OproAPIClient *_sharedClient = nil;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{

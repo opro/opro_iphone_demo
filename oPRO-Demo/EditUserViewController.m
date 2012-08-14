@@ -12,8 +12,8 @@
 
 @implementation EditUserViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
+
   NSLog(@"== Opening Edit User View");
   [super viewDidLoad];
   self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(updateUser:)];
@@ -41,8 +41,6 @@
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     NSLog(@"Error: %@", error);
   }];
-
-  
 }
 
 
@@ -63,7 +61,6 @@
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     NSLog(@"Error: %@", error);
   }];
-  
 }
 
 
