@@ -10,9 +10,11 @@
 
 #import "AFJSONRequestOperation.h"
 
-static NSString *oauthAccessToken;
+
 
 @implementation OproAPIClient
+
+@synthesize isAuthenticated = _isAuthenticated;
 
 + (OproAPIClient *) sharedClient{
   static OproAPIClient *_sharedClient = nil;
@@ -23,26 +25,50 @@ static NSString *oauthAccessToken;
   return _sharedClient;
 }
 
-+ (void) setAccessToken:(NSString *)access_token {
-  if (oauthAccessToken != access_token) {
-    oauthAccessToken = [access_token copy];
+
+- (void)authenticateUsingOAuthWithUsername:(NSString *)username
+                              password:(NSString *)password
+                               success:(void (^)(AFOAuthAccount *account))success
+                               failure:(void (^)(NSError *error))failure {
+
+  NSURL *url = [NSURL URLWithString:oClientBaseURLString];
+  AFOAuth2Client *OAuthClient = [[AFOAuth2Client alloc] initWithBaseURL:url];
+
+  [OAuthClient registerHTTPOperationClass:[AFJSONRequestOperation class]];
+  [OAuthClient authenticateUsingOAuthWithPath:@"oauth/token.json" username:username  password:password clientID:oClientID secret:oClientSecret success:^(AFOAuthAccount *account) {
+    [self setAuthorizationWithToken:account.credential.accessToken refreshToken:account.credential.refreshToken];
+    success(account);
+  } failure:^(NSError *error) {
+    failure(nil);
+  }];
+}
+
+- (void)setAuthorizationWithToken:(NSString *)accessToken refreshToken:(NSString *)refreshToken{
+
+  if (![accessToken isEqualToString:@""]) {
+    self.isAuthenticated = YES;
+    [[NSUserDefaults standardUserDefaults] setObject:accessToken forKey:@"kaccessToken"];
+    [[NSUserDefaults standardUserDefaults] setObject:refreshToken forKey:@"krefreshToken"];
+    [self setAuthorizationHeaderWithToken:accessToken];
   }
 }
 
-+ (NSString*)oauthAccessToken {
-  return oauthAccessToken;
-}
 
 - (id)initWithBaseURL:(NSURL *)url {
+
   self = [super initWithBaseURL:url];
   if (!self) {
     return nil;
   }
+
   [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
 	[self setDefaultHeader:@"Accept" value:@"application/json"];
-  if (oauthAccessToken) {
-    [self setAuthorizationHeaderWithToken:oauthAccessToken];
-  }
+
+  NSString *accessToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"kaccessToken"];
+  NSString *refreshToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"krefreshToken"];
+
+  [self setAuthorizationWithToken:accessToken refreshToken:refreshToken];
+
   return self;
 }
 

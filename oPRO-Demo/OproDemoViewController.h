@@ -11,7 +11,6 @@
 #import "AFHTTPClient.h"
 #import "AFJSONRequestOperation.h"
 
-#import "AFOAuth2Client.h"
 
 @interface OproDemoViewController : UIViewController
 {

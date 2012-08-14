@@ -14,10 +14,15 @@
 
 - (void)viewDidLoad
 {
+  NSLog(@"== Opening Edit User View");
   [super viewDidLoad];
+  self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(updateUser:)];
+  self.navigationItem.rightBarButtonItem.enabled = NO;
   
+
+  NSLog(@"== Using OAuth credentials to retrieve user data");
   [[OproAPIClient sharedClient] getPath:@"/users/me" parameters:[NSDictionary dictionary] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-    // NSLog(@"Success: %@", responseObject);
+    NSLog(@"== Received User data: %@", responseObject);
     [userEmailField setText:[responseObject objectForKey:@"email"]];
     NSString *twitter = [responseObject objectForKey:@"twitter"];
     NSString *zip = [responseObject objectForKey:@"zip"];
@@ -30,9 +35,9 @@
       [userZipField setText:zip];
     }
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(updateUser:)];
     self.navigationItem.rightBarButtonItem.enabled = YES;
     
+    NSLog(@"== Edit fields and select 'done' to modify entry on server");
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     NSLog(@"Error: %@", error);
   }];
@@ -48,8 +53,8 @@
   [mutableUserParameters setValue:userTwitterField.text forKey:@"twitter"];
   [mutableUserParameters setValue:userZipField.text forKey:@"zip"];
 
+  NSLog(@"== Setting data on server via PUT request: user: %@ ", mutableUserParameters);
   [[OproAPIClient sharedClient] putPath:@"/users/me" parameters:[NSDictionary dictionaryWithObject:mutableUserParameters forKey:@"user"] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-    // NSLog(@"Success: %@", responseObject);
     [successLabel setText: [NSString stringWithFormat:@"Updated User with attributes:%@ ", responseObject] ];
     [userEmailField resignFirstResponder];
     [userTwitterField resignFirstResponder];

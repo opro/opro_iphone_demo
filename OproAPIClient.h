@@ -10,15 +10,23 @@
 
 #import "AFHTTPClient.h"
 
+#import "AFOAuth2Client.h"
+
+
 @interface OproAPIClient : AFHTTPClient
 
-+ (NSString *)oauthAccessToken;
+@property (nonatomic, assign) BOOL isAuthenticated;
 
 + (OproAPIClient *) sharedClient;
 
+- (void)setAuthenticationWithToken:(NSString *)accessToken;
+
+- (void)authenticateUsingOAuthWithUsername:(NSString *)username
+                                  password:(NSString *)password
+                                   success:(void (^)(AFOAuthAccount *account))success
+                                   failure:(void (^)(NSError *error))failure;
 
 
-+ (void)setAccessToken:(NSString *)access_token;
 
 // Credentials for the opro demo server you will can modify oClientID and oClientSecret
 #define oClientBaseURLString @"https://opro-demo.herokuapp.com/"
