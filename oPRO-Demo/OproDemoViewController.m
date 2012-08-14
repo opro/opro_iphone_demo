@@ -44,7 +44,7 @@
 // once we get the access_token back we can set the auth headers for any future OproClient requests.
 // If the client was previously authorized and the credentials stored to disk we don't need to re-auth
 // we can direct the user to the next view where they should be authorized.
-- (IBAction)getAccessToken:(id)sender {
+- (IBAction)logUserIn:(id)sender {
   EditUserViewController *viewController = [[EditUserViewController alloc] initWithNibName:@"OproEditUserViewController" bundle:nil];
 
   if ([userUsernameField.text isEqualToString:@""] && [[OproAPIClient sharedClient] isAuthenticated]) {

@@ -25,7 +25,7 @@
   IBOutlet UITextField *userUsernameField;
 }
 - (IBAction)getUserCredentials:(id)sender;
-- (IBAction)getAccessToken:(id)sender;
+- (IBAction)logUserIn:(id)sender;
 
 // button outlets
 @property(retain) IBOutlet UIButton *getUserCredentialsButton;
