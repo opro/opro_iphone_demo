@@ -19,7 +19,7 @@ The purpose of this demo is to give you an idea of how you could implement an iO
 
 ## Setup
 
-This app requires a current version of Xcode installed on your computer:
+This app requires a current version of Xcode installed on your computer and uses cocoapods to install `AFNetworking` and `AFOAuth2Client`:
 
 ```sh
 $ cd oPRO-Demo
@@ -28,19 +28,18 @@ $ pod install
 $ open "oPRO-Demo.xcworkspace"
 ```
 
-
 ## Run
 
 
-Make sure the target is oPRO-Demo, build and run the program. When the app launches you can enter your credentials that you signed up for http://opro-demo.herokuapp.com/users/sign_up or if you don't want to enter your own credentials you can randomly generate some and have them returned to the iOS application (this is for demo purposes only, never do this in a real app). Once you have entered a valid email and password, click the "log in" button and you will be taken to a form where you can edit that user account.
+Make sure the target is oPRO-Demo, build and run the program. You can sign up for the service with your own credentials at http://opro-demo.herokuapp.com/users/sign_up or you can randomly generate some and have them returned to the iOS application (this is for demo purposes only, never do this in a real app) by pressing the "Create a Random user" button. Once you have entered a valid email and password, click the "log in" button and you will be taken to a form where you can edit that user account.
 
 Change some fields on that page and click "done" this will send an authenticated `PUT` request to the server as a user. The changed fields will be saved on the server and a json representation will be returned to the iOS client for your verification.
 
+If you close the application and re-open it you will see that the "log in" button is enabled already and you can do so without having to re-enter your user credentials, we can do this because we are saving the access token to disk and reading it in on application start.
+
 ## Next Steps
 
-This demo is purposfully bare bones, it is intended to be simple in nature, but to demonstrate token exchange and making authenticated requests. You could fork this project and add additional API endpoints to the client. You can use this project as the boilerplate for your own iOS client for an oPRO backed website.
-
-Typically you would want to store this token on the iOS device, so the next time a user opens the app, they don't have to re-enter their credentials.
+This demo is purposefully bare bones, it is intended to be simple in nature, but to demonstrate token exchange and making authenticated requests. You could fork this project and add additional API endpoints to the client. You can use this project as the boilerplate for your own iOS client for an oPRO backed website.
 
 Make sure to replace the `oClientBaseURLString` the `oClientID` and `oClientSecret` in your `OproAPIClient.h`
 
@@ -48,7 +47,7 @@ Make sure to replace the `oClientBaseURLString` the `oClientID` and `oClientSecr
     #define oClientID            @"5e163ed8c70cc28e993109c788325307"
     #define oClientSecret        @"898ca5b48548bb3988b3c8469081fcfb"
 
-The code in this library will not automatically refresh a stored access token,
+The code in this library will not automatically refresh a stored access token, you will need to implement that behavior. You might also want to add other log in features such as Facebook, twitter, etc.
 
 # iOS Concepts
 
@@ -173,6 +172,7 @@ Make sure to change the value of `oClientBaseURLString` from `https://opro-demo.
                                   password:(NSString *)password
                                    success:(void (^)(AFOAuthAccount *account))success
                                    failure:(void (^)(NSError *error))failure {
+
       NSURL *url = [NSURL URLWithString:oClientBaseURLString];
       AFOAuth2Client *OAuthClient = [[AFOAuth2Client alloc] initWithBaseURL:url];
 

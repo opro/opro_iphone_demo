@@ -19,7 +19,8 @@
   self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(updateUser:)];
   self.navigationItem.rightBarButtonItem.enabled = NO;
   
-
+  // Retrieve the user attributes from the server here, by now we are relying
+  // on our shared client to have it's authorization header set.
   NSLog(@"== Using OAuth credentials to retrieve user data");
   [[OproAPIClient sharedClient] getPath:@"/users/me" parameters:[NSDictionary dictionary] success:^(AFHTTPRequestOperation *operation, id responseObject) {
     NSLog(@"== Received User data: %@", responseObject);
@@ -44,6 +45,7 @@
 }
 
 
+// Update the user on the server by sending the fields to '/users/me' via a PUT request
 - (void)updateUser:(id)sender {  
   
   NSMutableDictionary *mutableUserParameters = [NSMutableDictionary dictionary];

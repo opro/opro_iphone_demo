@@ -22,7 +22,7 @@
 // Calls /users/random.json which will generate a random username and password on the server.
 // The server then returns the username and password that we can then use to log in.
 // You wouldn't want to do this in your actual app, but it provides for an easy iPhone app demo
-// oClientBaseURLString is defined in OproClient.h
+// this request needs to be a GET request since the APIClient is not yet authenticated
 - (IBAction)getUserCredentials:(id)sender {
   NSLog(@"== Retrieving username and password from server");
 
@@ -41,7 +41,9 @@
 
 // Once we have a username and password we can then request an OAuth 2 access token.
 // We send the username, password, along with client id and secret found in OproClient.h
-// once we get the access_token back we can set the auth headers for any future OproClient requests
+// once we get the access_token back we can set the auth headers for any future OproClient requests.
+// If the client was previously authorized and the credentials stored to disk we don't need to re-auth
+// we can direct the user to the next view where they should be authorized.
 - (IBAction)getAccessToken:(id)sender {
   EditUserViewController *viewController = [[EditUserViewController alloc] initWithNibName:@"OproEditUserViewController" bundle:nil];
 
@@ -63,6 +65,8 @@
     // if username and password fields are present allow the user to submit them
     [userUsernameField addTarget:self action:@selector(checkPasswordUsernamePresence:) forControlEvents:UIControlEventEditingChanged];
     [userPasswordField addTarget:self action:@selector(checkPasswordUsernamePresence:) forControlEvents:UIControlEventEditingChanged];
+
+  // Make the log in button clickable if a user has previously authenticated
   if ( [[OproAPIClient sharedClient] isAuthenticated])  {
     [getAccessTokenButton setEnabled:YES];
     [getAccessTokenButton setHighlighted:YES];
