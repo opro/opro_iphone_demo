@@ -19,7 +19,7 @@
 
 + (OproAPIClient *) sharedClient;
 
-- (void)setAuthenticationWithToken:(NSString *)accessToken;
+- (void)setAuthorizationWithToken:(NSString *)accessToken refreshToken:(NSString *)refreshToken;
 
 - (void)authenticateUsingOAuthWithUsername:(NSString *)username
                                   password:(NSString *)password
