@@ -83,6 +83,18 @@
 }
 
 ////////////////////////////////////////////////////////////////////////
+- (void)logout
+{
+    [self setIsAuthenticated:NO];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"kAccessToken"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"kRefreshToken"];
+    
+    [[self requestSerializer] setAuthorizationHeaderFieldWithToken:nil];
+}
+
+#pragma mark - Private
+
+////////////////////////////////////////////////////////////////////////
 - (void)setAuthorizationWithToken:(NSString *)accessToken refreshToken:(NSString *)refreshToken
 {
     if (accessToken != nil && ![accessToken isEqualToString:@""]) {

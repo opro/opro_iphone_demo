@@ -21,6 +21,7 @@
                                   password:(NSString *)password
                                    success:(void (^)(NSString *accessToken, NSString *refreshToken))success
                                    failure:(void (^)(NSError *error))failure;
+- (void)logout;
 
 // Credentials for the opro demo server you will can modify oClientID and oClientSecret
 #define oClientBaseURLString @"https://opro-demo.herokuapp.com/"

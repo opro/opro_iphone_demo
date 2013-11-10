@@ -133,7 +133,8 @@
 ////////////////////////////////////////////////////////////////////////
 - (void)logoutUser
 {
-    
+    [[OproAPIClient sharedClient] logout];
+    [self presentLoginIfNotAuthenticated];
 }
 
 @end
