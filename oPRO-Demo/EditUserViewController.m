@@ -15,6 +15,7 @@
 - (void)updateUser;
 - (void)logoutUser;
 - (void)presentLoginIfNotAuthenticated;
+- (void)clearInputFields;
 @end
 
 @implementation EditUserViewController
@@ -79,7 +80,7 @@
 - (void)getCurrentUser
 {
     NSLog(@"== Using OAuth credentials to retrieve user data");
-    
+
     [[OproAPIClient sharedClient] GET:@"/users/me.json"
                            parameters:nil
                               success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -131,9 +132,19 @@
 }
 
 ////////////////////////////////////////////////////////////////////////
+- (void)clearInputFields
+{
+    [[self successLabel] setText:@""];
+    [[self emailTextField] setText:@""];
+    [[self twitterTextField] setText:@""];
+    [[self zipTextField] setText:@""];
+}
+
+////////////////////////////////////////////////////////////////////////
 - (void)logoutUser
 {
     [[OproAPIClient sharedClient] logout];
+    [self clearInputFields];
     [self presentLoginIfNotAuthenticated];
 }
 
