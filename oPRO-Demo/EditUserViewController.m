@@ -7,64 +7,134 @@
 //
 
 #import "EditUserViewController.h"
+#import "OproDemoViewController.h"
 #import "OproAPIClient.h"
+
+@interface EditUserViewController () <OproDemoViewControllerDelegate>
+- (void)getCurrentUser;
+- (void)updateUser;
+- (void)logoutUser;
+- (void)presentLoginIfNotAuthenticated;
+@end
 
 @implementation EditUserViewController
 
-- (void)viewDidLoad {
-//
-//  NSLog(@"== Opening Edit User View");
-//  [super viewDidLoad];
-//  self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(updateUser:)];
-//  self.navigationItem.rightBarButtonItem.enabled = NO;
-//  
-//  // Retrieve the user attributes from the server here, by now we are relying
-//  // on our shared client to have it's authorization header set.
-//  NSLog(@"== Using OAuth credentials to retrieve user data");
-//  [[OproAPIClient sharedClient] getPath:@"/users/me" parameters:[NSDictionary dictionary] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//    NSLog(@"== Received User data: %@", responseObject);
-//    [userEmailField setText:[responseObject objectForKey:@"email"]];
-//    NSString *twitter = [responseObject objectForKey:@"twitter"];
-//    NSString *zip = [responseObject objectForKey:@"zip"];
-//    
-//    if (twitter != (id)[NSNull null]) {
-//      [userTwitterField setText:twitter];
-//    }
-//    
-//    if (zip != (id)[NSNull null]) {
-//      [userZipField setText:zip];
-//    }
-//    
-//    self.navigationItem.rightBarButtonItem.enabled = YES;
-//    
-//    NSLog(@"== Edit fields and select 'done' to modify entry on server");
-//  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//    NSLog(@"Error: %@", error);
-//  }];
+#pragma mark - View Lifecycle
+
+////////////////////////////////////////////////////////////////////////
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self presentLoginIfNotAuthenticated];
 }
 
+////////////////////////////////////////////////////////////////////////
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"LoginSegue"]) {
+        UINavigationController *navController = [segue destinationViewController];
+        OproDemoViewController *viewController = [[navController viewControllers] lastObject];
+        [viewController setDelegate:self];
+    }
+}
 
+#pragma mark - OproDemoViewControllerDelegate;
+
+////////////////////////////////////////////////////////////////////////
+- (void)oproDemoViewControllerDidAuthenticate:(OproDemoViewController *)viewController
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self getCurrentUser];
+}
+
+#pragma mark - Custom Actions
+
+////////////////////////////////////////////////////////////////////////
+- (IBAction)updateAccountButtonPressed:(id)sender
+{
+    [self updateUser];
+}
+
+////////////////////////////////////////////////////////////////////////
+- (IBAction)logoutButtonPressed:(id)sender
+{
+    [self logoutUser];
+}
+
+#pragma mark - Private
+
+////////////////////////////////////////////////////////////////////////
+- (void)presentLoginIfNotAuthenticated
+{
+    if (![[OproAPIClient sharedClient] isAuthenticated]) {
+        [self performSegueWithIdentifier:@"LoginSegue" sender:self];
+    } else {
+        [self getCurrentUser];
+    }
+}
+
+////////////////////////////////////////////////////////////////////////
+// Retrieve the user attributes from the server here, by now we are relying
+// on our shared client to have it's authorization header set.
+- (void)getCurrentUser
+{
+    NSLog(@"== Using OAuth credentials to retrieve user data");
+    
+    [[OproAPIClient sharedClient] GET:@"/users/me.json"
+                           parameters:nil
+                              success:^(NSURLSessionDataTask *task, id responseObject) {
+                                  NSString *email = responseObject[@"email"];
+                                  NSString *twitter = responseObject[@"twitter"];
+                                  NSString *zip = responseObject[@"zip"];
+                                  
+                                  [[self emailTextField] setText:email];
+                                  
+                                  if (twitter != (id)[NSNull null]) {
+                                      [[self twitterTextField] setText:twitter];
+                                  }
+                                  
+                                  if (zip != (id)[NSNull null]) {
+                                      [[self zipTextField] setText:zip];
+                                  }
+                              } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                                  NSLog(@"== Error: %@", [error localizedDescription]);
+                              }];
+}
+
+////////////////////////////////////////////////////////////////////////
 // Update the user on the server by sending the fields to '/users/me' via a PUT request
-- (void)updateUser:(id)sender {  
-//  
-//  NSMutableDictionary *mutableUserParameters = [NSMutableDictionary dictionary];
-//  [mutableUserParameters setValue:userEmailField.text forKey:@"email"];
-//  [mutableUserParameters setValue:userTwitterField.text forKey:@"twitter"];
-//  [mutableUserParameters setValue:userZipField.text forKey:@"zip"];
-//
-//  NSLog(@"== Setting data on server via PUT request: user: %@ ", mutableUserParameters);
-//  [[OproAPIClient sharedClient] putPath:@"/users/me" parameters:[NSDictionary dictionaryWithObject:mutableUserParameters forKey:@"user"] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//    [successLabel setText: [NSString stringWithFormat:@"Updated User with attributes:%@ ", responseObject] ];
-//    [userEmailField resignFirstResponder];
-//    [userTwitterField resignFirstResponder];
-//    [userZipField resignFirstResponder];
-//    
-//  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//    NSLog(@"Error: %@", error);
-//  }];
+- (void)updateUser
+{
+    NSString *email = [[self emailTextField] text];
+    NSString *twitter = [[self twitterTextField] text];
+    NSString *zip = [[self zipTextField] text];
+    
+    NSDictionary *params = @{ @"user":
+                                  @{ @"email"   : email,
+                                     @"twitter" : twitter,
+                                     @"zip"     : zip }};
+    
+    NSLog(@"== Setting data on server via PUT request: user: %@ ", params);
+    
+    [[OproAPIClient sharedClient] PUT:@"/users/me.json"
+                           parameters:params
+                              success:^(NSURLSessionDataTask *task, id responseObject) {
+                                  NSString *successText = [NSString stringWithFormat:@"User: %@", responseObject];
+                                  [[self successLabel] setText:successText];
+                                  [[self successLabel] sizeToFit];
+                                  [[self emailTextField] resignFirstResponder];
+                                  [[self twitterTextField] resignFirstResponder];
+                                  [[self zipTextField] resignFirstResponder];
+                              } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                                  NSLog(@"== Error: %@", [error localizedDescription]);
+                              }];
 }
 
-
+////////////////////////////////////////////////////////////////////////
+- (void)logoutUser
+{
+    
+}
 
 @end
 

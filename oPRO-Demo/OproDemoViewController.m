@@ -96,6 +96,7 @@
                                                             password:password
                                                              success:^(NSString *accessToken, NSString *refreshToken) {
                                                                  NSLog(@"== Auth success: %@", accessToken);
+                                                                 [[self delegate] oproDemoViewControllerDidAuthenticate:self];
                                                              } failure:^(NSError *error) {
                                                                  NSLog(@"== Auth failure: %@", [error localizedDescription]);
                                                              }];
