@@ -65,6 +65,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Welcome" id="ahq-E1-ADC"/>
                     <connections>
+                        <outlet property="createUserButton" destination="Yaa-N8-JnJ" id="hlC-Xc-B6V"/>
                         <outlet property="loginButton" destination="lQh-GF-V4p" id="ePd-fL-Zsj"/>
                         <outlet property="passwordTextField" destination="kib-Yh-zBh" id="bO9-7P-Nuj"/>
                         <outlet property="usernameTextField" destination="Dn1-PY-IqO" id="1La-I0-W9G"/>

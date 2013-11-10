@@ -29,13 +29,6 @@
     [[self passwordTextField] addTarget:self
                                  action:@selector(checkPasswordUsernamePresence:)
                        forControlEvents:UIControlEventEditingChanged];
-
-    // Make the log in button clickable if a user has previously authenticated
-    if ([[OproAPIClient sharedClient] isAuthenticated])  {
-//        [getAccessTokenButton setEnabled:YES];
-//        [getAccessTokenButton setHighlighted:YES];
-//        [getUserCredentialsButton setHighlighted:NO];
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -103,38 +96,22 @@
     [[OproAPIClient sharedClient] authenticateUsingOAuthWithUsername:username
                                                             password:password
                                                              success:^(NSString *accessToken, NSString *refreshToken) {
-                                                                 
+                                                                 NSLog(@"== Auth success: %@", accessToken);
                                                              } failure:^(NSError *error) {
-                                                                 
+                                                                 NSLog(@"== Auth failure: %@", [error localizedDescription]);
                                                              }];
-}
-
-////////////////////////////////////////////////////////////////////////
-
-- (IBAction)logUserIn:(id)sender {
-//  EditUserViewController *viewController = [[EditUserViewController alloc] initWithNibName:@"OproEditUserViewController" bundle:nil];
-//
-//  if ([userUsernameField.text isEqualToString:@""] && [[OproAPIClient sharedClient] isAuthenticated]) {
-//    [self.navigationController pushViewController:viewController animated:YES];
-//  }
-//  else {
-//    NSLog(@"== Exchanging username and password for OAuth credentials");
-//    [[OproAPIClient sharedClient] authenticateUsingOAuthWithUsername:userUsernameField.text password:userPasswordField.text success:^(AFOAuthAccount *account) {
-//      NSLog(@"  == Successfully received OAuth credentials %@", account);
-//      [self.navigationController pushViewController:viewController animated:YES];
-//    } failure:^(NSError *error) {
-//    }];
-//  }
 }
 
 ////////////////////////////////////////////////////////////////////////
 // if username and password fields are present allow the user to submit them
 - (void)checkPasswordUsernamePresence:(id)sender
 {
-//  if (![userUsernameField.text isEqualToString:@""] && ![userPasswordField.text isEqualToString:@""]) {
-//    [getAccessTokenButton setEnabled:YES];
-//    [getAccessTokenButton setHighlighted:YES];
-//  }
+    NSString *username = [[self usernameTextField] text];
+    NSString *password = [[self passwordTextField] text];
+    
+    if (![username isEqualToString:@""] && ![password isEqualToString:@""]) {
+        [[self loginButton] setEnabled:YES];
+    }
 }
 
 
