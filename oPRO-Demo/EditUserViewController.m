@@ -7,7 +7,6 @@
 //
 
 #import "EditUserViewController.h"
-
 #import "OproAPIClient.h"
 
 @implementation EditUserViewController

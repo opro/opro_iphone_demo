@@ -73,7 +73,6 @@
         
         [[self usernameTextField] setText:username];
         [[self passwordTextField] setText:password];
-        
         [[self loginButton] setEnabled:YES];
     } failure:^(NSError *error) {
         NSLog(@"== Error: %@", [error localizedDescription]);
@@ -113,7 +112,5 @@
         [[self loginButton] setEnabled:YES];
     }
 }
-
-
 
 @end
