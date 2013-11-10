@@ -1,6 +1,5 @@
-platform :ios
+platform :ios, '7.0'
 
 xcodeproj 'oPRO-Demo.xcodeproj'
 
-pod 'AFNetworking'
-pod 'AFOAuth2Client'
+pod 'AFNetworking', "~> 2.0"

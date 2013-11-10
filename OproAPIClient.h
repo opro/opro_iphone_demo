@@ -7,31 +7,25 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AFHTTPSessionManager.h>
 
-#import "AFHTTPClient.h"
-
-#import "AFOAuth2Client.h"
-
-
-@interface OproAPIClient : AFHTTPClient
+@interface OproAPIClient : AFHTTPSessionManager
 
 @property (nonatomic, assign) BOOL isAuthenticated;
 
-+ (OproAPIClient *) sharedClient;
++ (instancetype)sharedClient;
 
-- (void)setAuthorizationWithToken:(NSString *)accessToken refreshToken:(NSString *)refreshToken;
-
+- (void)createRandomUserWithSuccess:(void (^) (NSString *username, NSString *password))success
+                            failure:(void (^)(NSError *error))failure;
 - (void)authenticateUsingOAuthWithUsername:(NSString *)username
                                   password:(NSString *)password
-                                   success:(void (^)(AFOAuthAccount *account))success
+                                   success:(void (^)(NSString *accessToken, NSString *refreshToken))success
                                    failure:(void (^)(NSError *error))failure;
-
-
 
 // Credentials for the opro demo server you will can modify oClientID and oClientSecret
 #define oClientBaseURLString @"https://opro-demo.herokuapp.com/"
-#define oClientID            @"5e163ed8c70cc28e993109c788325307"
-#define oClientSecret        @"898ca5b48548bb3988b3c8469081fcfb"
+#define oClientID            @"bd443d6eb471fb36fb80481079bbc226"
+#define oClientSecret        @"0065ff3ac5940e42577756e0d8a74272"
 
 // Credentials if the server is local, you will need to modify oClientID and oClientSecret
 //#define oClientBaseURLString @"http://localhost:3000/"
