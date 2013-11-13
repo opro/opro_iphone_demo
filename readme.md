@@ -4,7 +4,7 @@
 
 This client shows how to trade a username and password for an access token on an [OAuth powered website](http://opro-demo.herokuapp.com) which is running on [Heroku](http://heroku.com). This token can then be used to access the API as an authenticated user. The website is written in Ruby on Rails and is using the [oPRO library](http://github.com/opro/opro) to provide OAuth authentication to their services.
 
-This demo leverages [AFNetworking](https://github.com/AFNetworking/AFNetworking) for it's networking library and [AFOauth2Client](https://github.com/AFNetworking/AFOAuth2Client) to exchange the email and password for an access token. More information is available below.
+This demo leverages [AFNetworking](https://github.com/AFNetworking/AFNetworking) for networking and to exchange the email and password for an access token. More information is available below.
 
 To view the code running on the server you can look at the [oPRO Demo Rails app](http://github.com/opro/opro_rails_demo).
 
@@ -14,12 +14,11 @@ If you are new to OAuth or to client side authentication it may be useful to che
 
 The purpose of this demo is to give you an idea of how you could implement an iOS client for an OAuth enabled Ruby on Rails website running on [Heroku](http://heroku.com).
 
-![](http://f.cl.ly/items/0M121e3j2y2x0i060o3i/Screen%20Shot%202012-08-10%20at%203.47.47%20PM.png)
-
+![](http://i.imgur.com/73JGlWE.png)
 
 ## Setup
 
-This app requires a current version of Xcode installed on your computer and uses cocoapods to install `AFNetworking` and `AFOAuth2Client`:
+This app requires a current version of Xcode installed on your computer and uses cocoapods to install `AFNetworking`:
 
 ```sh
 $ cd opro_iphone_demo
@@ -43,9 +42,11 @@ This demo is purposefully bare bones, it is intended to be simple in nature, but
 
 Make sure to replace the `oClientBaseURLString` the `oClientID` and `oClientSecret` in your `OproAPIClient.h`
 
+``` objective-c
     #define oClientBaseURLString @"https://opro-demo.herokuapp.com/"
     #define oClientID            @"5e163ed8c70cc28e993109c788325307"
     #define oClientSecret        @"898ca5b48548bb3988b3c8469081fcfb"
+```
 
 The code in this library will not automatically refresh a stored access token, you will need to implement that behavior. You might also want to add other log in features such as Facebook, twitter, etc.
 
@@ -53,9 +54,9 @@ The code in this library will not automatically refresh a stored access token, y
 
 If you're new to this type of authentication or new to iOS there are some important concepts that will help you modifying this project, or implementing your own project. At a high level we need to first send a valid username and password to the server along with client id and secret. The server will return an access_token we can use to authenticate future requests. We store this access_token and add it as a default header to a shared API client. Now any future web requests will carry the access_token so the server knows that our iOS app is acting on the behalf of the user.
 
-## Get an Access Token with AFOauth2Client
+## Get an Access Token with AFNetworking
 
-Before we can make authenticated requests we must exchange our user credentials for an auth token. [AFOauth2Client](https://github.com/AFNetworking/AFOAuth2Client) can do this for us. Once you have the library in your project you will need a client application registered at http://opro-demo.herokuapp.com/oauth_client_apps/new this will return a client_id and a client secret.
+Before we can make authenticated requests we must exchange our user credentials for an auth token. Once you have the library in your project you will need a client application registered at http://opro-demo.herokuapp.com/oauth_client_apps/new this will return a client_id and a client secret.
 
 In this example we will use these application credentials
 
@@ -70,22 +71,22 @@ For this example we will use these user credentials:
     email:    foo@example.com
     password: p4ssw0rd
 
-These are not valid credentials and should be changed to a user's credentials that can be obtained at http://opro-demo.herokuapp.com/users/sign_up. Once we can use AFOAuth2Client to send all of these credentials and return an access token:
+These are not valid credentials and should be changed to a user's credentials that can be obtained at http://opro-demo.herokuapp.com/users/sign_up. Once changed, we can use AFNetworking to send all of these credentials and return an access token:
 
-
-      NSURL *url = [NSURL URLWithString:@"https://opro-demo.herokuapp.com/"];
-
-      AFOAuth2Client *OAuthClient = [[AFOAuth2Client alloc] initWithBaseURL:url];
-
-      [OAuthClient registerHTTPOperationClass:[AFJSONRequestOperation class]];
-
-      [OAuthClient authenticateUsingOAuthWithPath:@"oauth/token.json" username:@"foo@example.com"  password:@"p4ssw0rd" clientID:@"3234myClientId5678" secret:@"14321myClientSecret8765" success:^(AFOAuthAccount *account) {
-
-        NSLog(@"Success: %@", account);
-      } failure:^(NSError *error) {
-
-        NSLog(@"Error: %@", error);
-      }];
+``` objective-c
+    NSDictionary *params = @{ @"username"       : @"foo@example.com",
+                              @"password"       : @"p4ssw0rd",
+                              @"client_id"      : @"3234myClientId5678",
+                              @"client_secret"  : @"14321myClientSecret8765" };
+    
+    [self POST:@"oauth/token.json"
+    parameters:params
+       success:^(NSURLSessionDataTask *task, id responseObject) {
+            NSLog("Response: %@", responseObject);
+       } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            NSLog("Error: %@", error);
+       }];
+```
 
 
 Again, make sure to replace the username, password, client id, and client secret with your own. Use HTTPS or your request ill not be secure. If you run the above you should get a dictionary printed in your log with an access token and refresh token. We can extract this logic into the method `authenticateUsingOAuthWithUsername` inside the `OproAPIClient.m`. Once we have the access token we can store it to disk for later use, and we can add it to our shared API client to authenticate future requests.
@@ -93,126 +94,124 @@ Again, make sure to replace the username, password, client id, and client secret
 
 # Making authenticated requests with AFNetworking
 
-We can use the AFNetworking to easily make requests to our server.
+We can use AFNetworking to easily make requests to our server.
 
 
 ## Build a Shared Instance of AFHTTPClient subclass
 
-To make authenticated requests we need to set the Authorization header so that every request will have the access token we received using AFOauth2Client. To do this we must subclass AFHTTPClient. An example of this subclass is `OproAPIClient` in the project. We can use a shared instance of this subclass to make future requests.
+To make authenticated requests we need to set the Authorization header so that every request will have the access token we received. To do this we must subclass `AFHTTPSessionManager`. An example of this subclass is `OproAPIClient` in the project. We can use a shared instance of this subclass to make future requests.
 
-First we will want to set the access token for this shared instance:
+We extracted this to a function so we can store the token to disk so it is available the next time the client application boots:
 
-    - (void)setAuthorizationWithToken:(NSString *)accessToken refreshToken:(NSString *)refreshToken{
-
-      [self setAuthorizationHeaderWithToken:accessToken];
+``` objective-c
+    - (void)setAuthorizationWithToken:(NSString *)accessToken refreshToken:(NSString *)refreshToken
+    {
+        if (accessToken != nil && ![accessToken isEqualToString:@""]) {
+            [self setIsAuthenticated:YES];
+            [[NSUserDefaults standardUserDefaults] setObject:accessToken forKey:@"kAccessToken"];
+            [[NSUserDefaults standardUserDefaults] setObject:refreshToken forKey:@"kRefreshToken"];
+        
+            [[self requestSerializer] setAuthorizationHeaderFieldWithToken:accessToken];
+        }
     }
-
-We extracted this to a function so we can store that token to disk so it is available the next time the client application boots:
-
-    - (void)setAuthorizationWithToken:(NSString *)accessToken refreshToken:(NSString *)refreshToken{
-
-      if (![accessToken isEqualToString:@""]) {
-        self.isAuthenticated = YES;
-        [[NSUserDefaults standardUserDefaults] setObject:accessToken forKey:@"kaccessToken"];
-        [[NSUserDefaults standardUserDefaults] setObject:refreshToken forKey:@"krefreshToken"];
-
-        [self setAuthorizationHeaderWithToken:accessToken];
-      }
-    }
+```
 
 We also set the BOOL property `isAuthenticated` so our shared client knows if it has been authenticated or not.
 
-Next we need to overwrite the `initWithBaseURL` to set the default accept and request to JSON. Here we also set the Authorization header:
+Next we need to overwrite the `initWithBaseURL`. We can then set our authorization header from the stored value if we want like this:
 
-    - (id)initWithBaseURL:(NSURL *)url {
-
-      if (!self) {
-        return nil;
-      }
-      [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
-      [self setDefaultHeader:@"Accept" value:@"application/json"];
-
-      return self;
+``` objective-c
+    - (id)initWithBaseURL:(NSURL *)url
+    {
+        self = [super initWithBaseURL:url];
+    
+        if (self) {
+            NSString *accessToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"kAccessToken"];
+            NSString *refreshToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"kRefreshToken"];
+        
+            [self setAuthorizationWithToken:accessToken refreshToken:refreshToken];
+        }
+    
+        return self;
     }
-
-We can then set our authorization header from the stored value if we want like this:
-
-    - (id)initWithBaseURL:(NSURL *)url {
-
-      self = [super initWithBaseURL:url];
-      if (!self) {
-        return nil;
-      }
-
-      [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
-      [self setDefaultHeader:@"Accept" value:@"application/json"];
-
-      NSString *accessToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"kaccessToken"];
-      NSString *refreshToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"krefreshToken"];
-
-      [self setAuthorizationWithToken:accessToken refreshToken:refreshToken];
-
-      return self;
-    }
+```
 
 Finally we put all of this together to provide a standard interface through a shared client:
 
-    + (OproAPIClient *) sharedClient{
-      static OproAPIClient *_sharedClient = nil;
-      static dispatch_once_t onceToken;
-      dispatch_once(&onceToken, ^{
-        _sharedClient = [[self alloc] initWithBaseURL:[NSURL URLWithString:oClientBaseURLString]];
-      });
-      return _sharedClient;
+``` objective-c
+    + (OproAPIClient *) sharedClient
+    {
+        static OproAPIClient *_sharedClient = nil;
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            _sharedClient = [[self alloc] initWithBaseURL:[NSURL URLWithString:oClientBaseURLString]];
+        });
+        
+        return _sharedClient;
     }
+```
 
-Make sure to change the value of `oClientBaseURLString` from `https://opro-demo.herokuapp.com/` to your own url. Also be sure to use HTTPS, if anyone sees the header passed to the server they can steal the credentials of that user. This is how programs like firesheep work, by using HTTPS we mitigate and eliminate most of the risks. Now we are ready to set our Authorization header using AFOauth2Client. We can do that like this:
+Make sure to change the value of `oClientBaseURLString` from `https://opro-demo.herokuapp.com/` to your own url. Also be sure to use HTTPS, if anyone sees the header passed to the server they can steal the credentials of that user. This is how programs like firesheep work, by using HTTPS we mitigate and eliminate most of the risks. Now we are ready to set our Authorization header. We can do that like this:
 
+``` objective-c
     - (void)authenticateUsingOAuthWithUsername:(NSString *)username
-                                  password:(NSString *)password
-                                   success:(void (^)(AFOAuthAccount *account))success
-                                   failure:(void (^)(NSError *error))failure {
-
-      NSURL *url = [NSURL URLWithString:oClientBaseURLString];
-      AFOAuth2Client *OAuthClient = [[AFOAuth2Client alloc] initWithBaseURL:url];
-
-      [OAuthClient registerHTTPOperationClass:[AFJSONRequestOperation class]];
-      [OAuthClient authenticateUsingOAuthWithPath:@"oauth/token.json" username:username  password:password clientID:oClientID secret:oClientSecret success:^(AFOAuthAccount *account) {
-        [self setAuthorizationWithToken:account.credential.accessToken refreshToken:account.credential.refreshToken];
-        success(account);
-      } failure:^(NSError *error) {
-        failure(nil);
-      }];
-
+                                      password:(NSString *)password
+                                       success:(void (^)(NSString *accessToken, NSString *refreshToken))success
+                                       failure:(void (^)(NSError *))failure
+    {
+        NSDictionary *params = @{ @"username"       : username,
+                                  @"password"       : password,
+                                  @"client_id"      : oClientID,
+                                  @"client_secret"  : oClientSecret };
+        
+        [self POST:@"oauth/token.json"
+        parameters:params
+           success:^(NSURLSessionDataTask *task, id responseObject) {
+               NSString *accessToken = responseObject[@"access_token"];
+               NSString *refreshToken = responseObject[@"refresh_token"];
+               
+               [self setAuthorizationWithToken:accessToken refreshToken:refreshToken];
+               
+               if (success) success(accessToken, refreshToken);
+           } failure:^(NSURLSessionDataTask *task, NSError *error) {
+               if (failure) failure(error);
+           }];
     }
-
-
+```
 
 ### Make Authenticated Request with Shared Interface of OproAPIClient
 
 Once we've set the access token in our `OproAPIClient` we can use the client to make authenticated calls. For example we could get a json representation of a user by getting `/users/me` on our server while authenticated:
 
-
-    [[OproAPIClient sharedClient] getPath:@"/users/me" parameters:[NSDictionary dictionary] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-      NSLog(@"Success: %@", responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-      NSLog(@"Error: %@", error);
-    }];
-
+``` objective-c
+        [[OproAPIClient sharedClient] GET:@"/users/me.json"
+                            parameters:nil
+                              success:^(NSURLSessionDataTask *task, id responseObject) {
+                                    NSLog(@"== Response: %@", responseObject);      
+                              } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                                  NSLog(@"== Error: %@", [error localizedDescription]);
+                              }];
+```
 
 If you run that code you will get your authenticated user in JSON representation. In addition to issuing GET requests you can also POST, PUT, and DELETE. For example to update this user you need to PUT to the same path (/users/me). To update attributes you can build a dictionary. For example if we wanted to set the email and twitter we could build this dictionary:
 
-    NSMutableDictionary *mutableUserParameters = [NSMutableDictionary dictionary];
-    [mutableUserParameters setValue:@"awesome@example.com" forKey:@"email"];
-    [mutableUserParameters setValue:@"schneems" forKey:@"twitter"];
+``` objective-c
+        NSDictionary *params = @{ @"user":
+                                  @{ @"email"   : @"awesome@example.com",
+                                     @"twitter" : @"schneems",
+                                     @"zip"     : @"11111" }};
+```
 
 Then we can pass that dictionary into our request under the "user" key:
-
-    [[OproAPIClient sharedClient] putPath:@"/users/me" parameters:[NSDictionary dictionaryWithObject:mutableUserParameters forKey:@"user"] success:^(AFHTTPRequestOperation *operation, id responseObject) {
-      NSLog(@"Success: %@", responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-      NSLog(@"Error: %@", error);
-    }];
+``` objective-c
+        [[OproAPIClient sharedClient] PUT:@"/users/me.json"
+                           parameters:params
+                              success:^(NSURLSessionDataTask *task, id responseObject) {
+                                    NSLog(@"Success: %@", responseObject);
+                              } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                                    NSLog(@"== Error: %@", [error localizedDescription]);
+                              }];
+```
 
 This will show up in the Rails server as a `params` of:
 
@@ -222,7 +221,7 @@ To view the code running on the server you can look at the [oPRO Demo Rails app]
 
 ## Recap
 
-So what did we learn? We need to exchange a username and password for an access token with `AFOauth2Client` then we can set our authorization header in a shared subclass of `AFHTTPClient`, and finally we can use that authorization header to make authenticated requests to an OAuth powered Ruby on Rails server (using the [oPRO library](http://github.com/opro/opro)). There are problems you can run into every step of the way. Below are some troubleshooting steps that should help.
+So what did we learn? We need to exchange a username and password for an access token with `AFNetworking` then we can set our authorization header in a shared subclass of `AFHTTPSessionManager`, and finally we can use that authorization header to make authenticated requests to an OAuth powered Ruby on Rails server (using the [oPRO library](http://github.com/opro/opro)). There are problems you can run into every step of the way. Below are some troubleshooting steps that should help.
 
 ## Troubleshooting
 
