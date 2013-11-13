@@ -17,15 +17,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    self.viewController = [[OproDemoViewController alloc] initWithNibName:@"OproDemoViewController" bundle:nil];
-
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:self.viewController];
-
-    self.window.rootViewController = navigationController;
-
-    [self.window makeKeyAndVisible];
     return YES;
 }
 

@@ -9,14 +9,13 @@
 #import <Foundation/Foundation.h>
 
 @interface EditUserViewController : UIViewController <UITextFieldDelegate>
-{
-  IBOutlet UITextField *userEmailField;
-  IBOutlet UITextField *userTwitterField;
-  IBOutlet UITextField *userZipField;
-  
-  IBOutlet UILabel *successLabel;
 
-}
+@property (nonatomic, weak) IBOutlet UITextField *emailTextField;
+@property (nonatomic, weak) IBOutlet UITextField *twitterTextField;
+@property (nonatomic, weak) IBOutlet UITextField *zipTextField;
+@property (nonatomic, weak) IBOutlet UILabel *successLabel;
 
+- (IBAction)updateAccountButtonPressed:(id)sender;
+- (IBAction)logoutButtonPressed:(id)sender;
 
 @end

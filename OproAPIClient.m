@@ -8,69 +8,102 @@
 
 #import "OproAPIClient.h"
 
-#import "AFJSONRequestOperation.h"
-
-
+@interface OproAPIClient ()
+- (void)setAuthorizationWithToken:(NSString *)accessToken refreshToken:(NSString *)refreshToken;
+@end
 
 @implementation OproAPIClient
 
-@synthesize isAuthenticated = _isAuthenticated;
-
-+ (OproAPIClient *) sharedClient{
-
-  static OproAPIClient *_sharedClient = nil;
-  static dispatch_once_t onceToken;
-  dispatch_once(&onceToken, ^{
-    _sharedClient = [[self alloc] initWithBaseURL:[NSURL URLWithString:oClientBaseURLString]];
-  });
-  return _sharedClient;
+////////////////////////////////////////////////////////////////////////
++ (instancetype)sharedClient
+{
+    static OproAPIClient *_sharedClient = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedClient = [[OproAPIClient alloc] initWithBaseURL:[NSURL URLWithString:oClientBaseURLString]];
+    });
+    
+    return _sharedClient;
 }
 
+////////////////////////////////////////////////////////////////////////
+- (id)initWithBaseURL:(NSURL *)url
+{
+    self = [super initWithBaseURL:url];
+    
+    if (self) {
+        NSString *accessToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"kAccessToken"];
+        NSString *refreshToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"kRefreshToken"];
+        
+        [self setAuthorizationWithToken:accessToken refreshToken:refreshToken];
+    }
+    
+    return self;
+}
 
+////////////////////////////////////////////////////////////////////////
 - (void)authenticateUsingOAuthWithUsername:(NSString *)username
-                              password:(NSString *)password
-                               success:(void (^)(AFOAuthAccount *account))success
-                               failure:(void (^)(NSError *error))failure {
-
-  NSURL *url = [NSURL URLWithString:oClientBaseURLString];
-  AFOAuth2Client *OAuthClient = [[AFOAuth2Client alloc] initWithBaseURL:url];
-
-  [OAuthClient registerHTTPOperationClass:[AFJSONRequestOperation class]];
-  [OAuthClient authenticateUsingOAuthWithPath:@"oauth/token.json" username:username  password:password clientID:oClientID secret:oClientSecret success:^(AFOAuthAccount *account) {
-    [self setAuthorizationWithToken:account.credential.accessToken refreshToken:account.credential.refreshToken];
-    success(account);
-  } failure:^(NSError *error) {
-    failure(nil);
-  }];
+                                  password:(NSString *)password
+                                   success:(void (^)(NSString *accessToken, NSString *refreshToken))success
+                                   failure:(void (^)(NSError *))failure
+{
+    NSDictionary *params = @{ @"username"       : username,
+                              @"password"       : password,
+                              @"client_id"      : oClientID,
+                              @"client_secret"  : oClientSecret };
+    
+    [self POST:@"oauth/token.json"
+    parameters:params
+       success:^(NSURLSessionDataTask *task, id responseObject) {
+           NSString *accessToken = responseObject[@"access_token"];
+           NSString *refreshToken = responseObject[@"refresh_token"];
+           
+           [self setAuthorizationWithToken:accessToken refreshToken:refreshToken];
+           
+           if (success) success(accessToken, refreshToken);
+       } failure:^(NSURLSessionDataTask *task, NSError *error) {
+           if (failure) failure(error);
+       }];
 }
 
-- (void)setAuthorizationWithToken:(NSString *)accessToken refreshToken:(NSString *)refreshToken{
-
-  if (![accessToken isEqualToString:@""]) {
-    self.isAuthenticated = YES;
-    [[NSUserDefaults standardUserDefaults] setObject:accessToken forKey:@"kaccessToken"];
-    [[NSUserDefaults standardUserDefaults] setObject:refreshToken forKey:@"krefreshToken"];
-    [self setAuthorizationHeaderWithToken:accessToken];
-  }
+////////////////////////////////////////////////////////////////////////
+- (void)createRandomUserWithSuccess:(void (^)(NSString *username, NSString *password))success
+                            failure:(void (^)(NSError *error))failure
+{
+    [self GET:@"users/random.json"
+   parameters:nil
+      success:^(NSURLSessionDataTask *task, id responseObject) {
+          NSString *username = responseObject[@"username"];
+          NSString *password = responseObject[@"password"];
+          
+          if (success) success(username, password);
+      } failure:^(NSURLSessionDataTask *task, NSError *error) {
+          if (error) failure(error);
+      }];
 }
 
+////////////////////////////////////////////////////////////////////////
+- (void)logout
+{
+    [self setIsAuthenticated:NO];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"kAccessToken"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"kRefreshToken"];
+    
+    [[self requestSerializer] setAuthorizationHeaderFieldWithToken:nil];
+}
 
-- (id)initWithBaseURL:(NSURL *)url {
+#pragma mark - Private
 
-  self = [super initWithBaseURL:url];
-  if (!self) {
-    return nil;
-  }
-
-  [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
-	[self setDefaultHeader:@"Accept" value:@"application/json"];
-
-  NSString *accessToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"kaccessToken"];
-  NSString *refreshToken = [[NSUserDefaults standardUserDefaults] objectForKey:@"krefreshToken"];
-
-  [self setAuthorizationWithToken:accessToken refreshToken:refreshToken];
-
-  return self;
+////////////////////////////////////////////////////////////////////////
+- (void)setAuthorizationWithToken:(NSString *)accessToken refreshToken:(NSString *)refreshToken
+{
+    if (accessToken != nil && ![accessToken isEqualToString:@""]) {
+        [self setIsAuthenticated:YES];
+        [[NSUserDefaults standardUserDefaults] setObject:accessToken forKey:@"kAccessToken"];
+        [[NSUserDefaults standardUserDefaults] setObject:refreshToken forKey:@"kRefreshToken"];
+        
+        [[self requestSerializer] setAuthorizationHeaderFieldWithToken:accessToken];
+    }
 }
 
 @end
